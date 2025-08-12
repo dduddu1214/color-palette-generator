@@ -1,0 +1,30 @@
+/* src/app/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* 전역 기본 스타일이 필요하면 여기에서 일반 CSS로 지정하세요. */
+}
+
+/* components 레이어의 @apply 기반 유틸은 Tailwind v4 환경에서 문제를 유발하여 제거했습니다. */
+
+@layer utilities {
+  /* 텍스트 선택 불가 */
+  .select-none {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* 그라데이션 배경 */
+  .gradient-bg {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+  
+  /* 카드 그림자 */
+  .card-shadow {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+}
