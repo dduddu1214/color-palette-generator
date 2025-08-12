@@ -1,7 +1,7 @@
 // src/components/PaletteGenerator.tsx
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Shuffle, Download, Save, Palette, Settings, RefreshCw, HelpCircle, Shield } from 'lucide-react';
 import { Color, Palette as PaletteType } from '@/types';
 import { generateRandomPalette, generateHarmoniousPalette } from '@/lib/colorUtils';
@@ -13,6 +13,7 @@ import { Button } from './ui/Button';
 import { HelpModal } from './HelpModal';
 import { AccessibilityChecker } from './AccessibilityChecker';
 import { PaletteModeHelper } from './PaletteModeHelper';
+import { ColorPicker } from './ColorPicker';
 
 type PaletteMode = 'random' | 'monochromatic' | 'analogous' | 'complementary' | 'triadic';
 
@@ -29,16 +30,7 @@ export function PaletteGenerator() {
   
   const { addToast } = useToast();
 
-  // 컴포넌트 마운트 시 저장된 팔레트 불러오기
-  useEffect(() => {
-    const saved = getFromStorage<PaletteType[]>('saved-palettes', []);
-    setSavedPalettes(saved);
-    
-    // 초기 팔레트 생성
-    generateNewPalette();
-  }, []);
-
-  const generateNewPalette = async () => {
+  const generateNewPalette = useCallback(async () => {
     setIsGenerating(true);
     
     // 약간의 지연으로 로딩 효과 추가
@@ -54,9 +46,9 @@ export function PaletteGenerator() {
     
     setCurrentPalette(newColors);
     setIsGenerating(false);
-  };
+  }, [paletteMode, paletteSize, baseColor]);
 
-  const savePalette = () => {
+  const savePalette = useCallback(() => {
     if (currentPalette.length === 0) return;
     
     const newPalette: PaletteType = {
@@ -74,17 +66,17 @@ export function PaletteGenerator() {
       type: 'success',
       message: '팔레트가 저장되었습니다!',
     });
-  };
+  }, [currentPalette, savedPalettes, addToast]);
 
-  const loadPalette = (palette: PaletteType) => {
+  const loadPalette = useCallback((palette: PaletteType) => {
     setCurrentPalette(palette.colors);
     addToast({
       type: 'info',
       message: `${palette.name}을(를) 불러왔습니다`,
     });
-  };
+  }, [addToast]);
 
-  const exportAsCSS = () => {
+  const exportAsCSS = useCallback(() => {
     if (currentPalette.length === 0) return;
     const css = exportPaletteAsCSS(currentPalette, 'my-palette');
     downloadFile(css, 'palette.css', 'text/css');
@@ -92,9 +84,9 @@ export function PaletteGenerator() {
       type: 'success',
       message: 'CSS 파일이 다운로드되었습니다!',
     });
-  };
+  }, [currentPalette, addToast]);
 
-  const exportAsJSON = () => {
+  const exportAsJSON = useCallback(() => {
     if (currentPalette.length === 0) return;
     const json = exportPaletteAsJSON(currentPalette, 'My Palette');
     downloadFile(json, 'palette.json', 'application/json');
@@ -102,7 +94,16 @@ export function PaletteGenerator() {
       type: 'success',
       message: 'JSON 파일이 다운로드되었습니다!',
     });
-  };
+  }, [currentPalette, addToast]);
+
+  // 컴포넌트 마운트 시 저장된 팔레트 불러오기
+  useEffect(() => {
+    const saved = getFromStorage<PaletteType[]>('saved-palettes', []);
+    setSavedPalettes(saved);
+    
+    // 초기 팔레트 생성
+    generateNewPalette();
+  }, [generateNewPalette]);
 
   // 키보드 단축키 설정
   const shortcuts = createPaletteShortcuts({
@@ -292,6 +293,18 @@ export function PaletteGenerator() {
           </div>
         </div>
       )}
+
+      {/* 모달들 */}
+      <HelpModal isOpen={showHelp} onClose={() => setShowHelp(false)} />
+      <AccessibilityChecker 
+        isOpen={showAccessibility} 
+        onClose={() => setShowAccessibility(false)}
+        colors={currentPalette}
+      />
+      <PaletteModeHelper 
+        isOpen={showModeHelper} 
+        onClose={() => setShowModeHelper(false)}
+      />
     </div>
   );
 }

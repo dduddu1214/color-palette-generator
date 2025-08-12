@@ -53,10 +53,15 @@ export function AccessibilityChecker({ colors, isOpen, onClose }: AccessibilityC
       <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
         {/* 헤더 */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-            <Shield className="h-5 w-5" />
-            접근성 분석
-          </h2>
+          <div>
+            <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+              <Shield className="h-5 w-5" />
+              색상 적합성 검사
+            </h2>
+            <p className="text-sm text-gray-600 mt-1">
+              웹 접근성 기준에 맞는지 확인하고, 색맹 사용자도 구분할 수 있는지 검사합니다
+            </p>
+          </div>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -75,7 +80,7 @@ export function AccessibilityChecker({ colors, isOpen, onClose }: AccessibilityC
                 : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >
-            대비율 분석
+            📊 색상 대비 검사
           </button>
           <button
             onClick={() => setSelectedTab('colorblind')}
@@ -85,7 +90,7 @@ export function AccessibilityChecker({ colors, isOpen, onClose }: AccessibilityC
                 : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >
-            색맹 친화성
+            👁️ 색맹 친화성 검사
           </button>
         </div>
 

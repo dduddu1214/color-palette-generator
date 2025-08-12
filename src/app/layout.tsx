@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'ko_KR',
-    url: 'https://your-vercel-url.vercel.app', // 실제 Vercel URL로 변경해주세요
+    url: 'https://color-palette-generator-one-theta.vercel.app',
     siteName: 'Color Palette Generator',
     title: '🎨 Color Palette Generator - 색상 팔레트 생성기',
     description: '디자이너와 개발자를 위한 완벽한 색상 팔레트 생성 도구. 조화로운 색상 조합을 쉽게 만들고 바로 사용하세요!',

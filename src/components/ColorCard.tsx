@@ -18,19 +18,28 @@ export function ColorCard({ color, onColorUpdate, className }: ColorCardProps) {
   const [currentFormat, setCurrentFormat] = useState<ColorFormat>('hex');
   const [isCopied, setIsCopied] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
+  const [isClicking, setIsClicking] = useState(false);
   const { addToast } = useToast();
 
   const handleCopyColor = async () => {
+    // 클릭 애니메이션 시작
+    setIsClicking(true);
+    
     const success = await copyColorToClipboard(color, currentFormat);
     if (success) {
       setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
+      setTimeout(() => {
+        setIsCopied(false);
+        setIsClicking(false);
+      }, 1500); // 1.5초 후 모든 상태 리셋
+      
       addToast({
         type: 'success',
         message: `${getColorString(color, currentFormat)} 복사됨!`,
         duration: 2000,
       });
     } else {
+      setIsClicking(false);
       addToast({
         type: 'error',
         message: '복사에 실패했습니다',
@@ -71,32 +80,50 @@ export function ColorCard({ color, onColorUpdate, className }: ColorCardProps) {
     <div className={cn('group relative fade-in', className)}>
       {/* 메인 색상 영역 */}
       <div
-        className="relative w-full aspect-[4/5] sm:aspect-square color-card"
+        className={`relative w-full aspect-[4/5] sm:aspect-square color-card transition-all duration-300 ${
+          isClicking ? 'scale-95' : ''
+        } ${isCopied ? 'ring-4 ring-blue-400 ring-opacity-75 shadow-xl' : ''}`}
         style={{ backgroundColor: color.hex }}
         onClick={handleCopyColor}
       >
-        {/* 복사 상태 오버레이 */}
+        {/* 복사 성공 효과 - 초록 체크 대신 작은 텍스트 */}
         {isCopied && (
-          <div className="absolute inset-0 bg-black/20 flex items-center justify-center backdrop-blur-sm rounded-xl">
-            <div className="bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg">
-              <Check size={20} className="text-green-600" />
+          <div className="absolute top-2 left-1/2 transform -translate-x-1/2 z-10">
+            <div 
+              className="px-3 py-1 rounded-full text-xs font-medium shadow-lg animate-bounce"
+              style={{
+                backgroundColor: textColor === '#000000' ? 'rgba(255, 255, 255, 0.95)' : 'rgba(0, 0, 0, 0.95)',
+                color: textColor === '#000000' ? '#000000' : '#FFFFFF'
+              }}
+            >
+              복사됨! ✨
             </div>
           </div>
         )}
 
         {/* 복사 아이콘 */}
-        <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
+        <div className={`absolute top-3 right-3 transition-all duration-300 ${
+          isCopied ? 'opacity-100 scale-110' : 'opacity-0 group-hover:opacity-100'
+        }`}>
           <div 
             className="p-2 rounded-full backdrop-blur-sm transition-all duration-200 hover:scale-110"
             style={{ 
               backgroundColor: textColor === '#000000' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)'
             }}
           >
-            <Copy 
-              size={16} 
-              style={{ color: textColor }}
-              className="drop-shadow-sm"
-            />
+            {isCopied ? (
+              <Check 
+                size={16} 
+                style={{ color: textColor }}
+                className="animate-pulse"
+              />
+            ) : (
+              <Copy 
+                size={16} 
+                style={{ color: textColor }}
+                className="drop-shadow-sm"
+              />
+            )}
           </div>
         </div>
 
