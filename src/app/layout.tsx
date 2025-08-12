@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: 'Color Palette Generator',
   description: '아름다운 색상 팔레트를 생성하고 관리하세요',
   keywords: ['color', 'palette', 'generator', 'design', 'hex', 'rgb', 'hsl'],
-  authors: [{ name: 'Your Name' }],
+  authors: [{ name: 'devdduddu' }],
   viewport: 'width=device-width, initial-scale=1',
 }
 

@@ -2,7 +2,9 @@
 
 아름다운 색상 팔레트를 생성하고 관리할 수 있는 웹 애플리케이션입니다. 접근성을 고려한 디자인과 다양한 편의 기능을 제공합니다.
 
-
+![Color Palette Generator](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
 ## ✨ 주요 기능
 
@@ -51,7 +53,7 @@
 
 ```bash
 # 프로젝트 클론
-git clone https://github.com/YOUR_USERNAME/color-palette-generator.git
+git clone https://github.com/devdduddu/color-palette-generator.git
 cd color-palette-generator
 
 # 의존성 설치
