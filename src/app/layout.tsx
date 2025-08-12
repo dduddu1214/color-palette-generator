@@ -7,11 +7,45 @@ import { ToastProvider } from '@/components/ui/Toast'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Color Palette Generator',
-  description: '아름다운 색상 팔레트를 생성하고 관리하세요',
-  keywords: ['color', 'palette', 'generator', 'design', 'hex', 'rgb', 'hsl'],
-  authors: [{ name: 'devdduddu' }],
+  title: 'Color Palette Generator - 아름다운 색상 팔레트 생성기',
+  description: '🎨 디자이너와 개발자를 위한 색상 팔레트 생성 도구입니다. 랜덤, 조화로운 색상 조합을 쉽게 만들고, HEX/RGB/HSL 형식으로 복사하며, CSS/JSON으로 내보낼 수 있습니다.',
+  keywords: ['color', 'palette', 'generator', 'design', 'hex', 'rgb', 'hsl', '색상', '팔레트', '디자인'],
+  authors: [{ name: 'devdduddu', url: 'https://github.com/devdduddu' }],
+  creator: 'devdduddu',
   viewport: 'width=device-width, initial-scale=1',
+  robots: 'index, follow',
+  
+  // Open Graph (카카오톡, 페이스북 등)
+  openGraph: {
+    type: 'website',
+    locale: 'ko_KR',
+    url: 'https://your-vercel-url.vercel.app', // 실제 Vercel URL로 변경해주세요
+    siteName: 'Color Palette Generator',
+    title: '🎨 Color Palette Generator - 색상 팔레트 생성기',
+    description: '디자이너와 개발자를 위한 완벽한 색상 팔레트 생성 도구. 조화로운 색상 조합을 쉽게 만들고 바로 사용하세요!',
+    images: [
+      {
+        url: '/og-image.png', // 나중에 추가할 이미지
+        width: 1200,
+        height: 630,
+        alt: 'Color Palette Generator - 색상 팔레트 생성기',
+      }
+    ],
+  },
+  
+  // Twitter Card
+  twitter: {
+    card: 'summary_large_image',
+    site: '@devdduddu',
+    creator: '@devdduddu',
+    title: '🎨 Color Palette Generator',
+    description: '디자이너와 개발자를 위한 색상 팔레트 생성 도구',
+    images: ['/og-image.png'],
+  },
+  
+  // 추가 메타데이터
+  category: 'Design Tools',
+  classification: 'Design, Development, Tools',
 }
 
 export default function RootLayout({
@@ -42,7 +76,7 @@ export default function RootLayout({
           <footer className="bg-white border-t border-gray-200 mt-auto">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
               <p className="text-center text-sm text-gray-500">
-                Made with ❤️ by devdduddu for designers and developers
+                Made with ❤️ for designers and developers
               </p>
             </div>
           </footer>
