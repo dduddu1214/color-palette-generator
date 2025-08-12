@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Download, Save, Palette, RefreshCw, HelpCircle, Shield } from 'lucide-react';
+import { Shuffle, Download, Save, Palette, Settings, RefreshCw, HelpCircle, Shield } from 'lucide-react';
 import { Color, Palette as PaletteType } from '@/types';
 import { generateRandomPalette, generateHarmoniousPalette } from '@/lib/colorUtils';
 import { generateId, exportPaletteAsCSS, exportPaletteAsJSON, downloadFile, saveToStorage, getFromStorage } from '@/lib/utils';
@@ -10,8 +10,9 @@ import { useKeyboardShortcuts, createPaletteShortcuts } from '@/lib/useKeyboardS
 import { useToast } from './ui/Toast';
 import { ColorCard } from './ColorCard';
 import { Button } from './ui/Button';
-// import { HelpModal } from './HelpModal';
-// import { AccessibilityChecker } from './AccessibilityChecker';
+import { HelpModal } from './HelpModal';
+import { AccessibilityChecker } from './AccessibilityChecker';
+import { PaletteModeHelper } from './PaletteModeHelper';
 
 type PaletteMode = 'random' | 'monochromatic' | 'analogous' | 'complementary' | 'triadic';
 
@@ -22,21 +23,11 @@ export function PaletteGenerator() {
   const [baseColor, setBaseColor] = useState('#3B82F6');
   const [savedPalettes, setSavedPalettes] = useState<PaletteType[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
-  // const [showHelp, setShowHelp] = useState(false);
-  // const [showAccessibility, setShowAccessibility] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
+  const [showAccessibility, setShowAccessibility] = useState(false);
+  const [showModeHelper, setShowModeHelper] = useState(false);
   
   const { addToast } = useToast();
-
-  // 키보드 단축키 설정은 관련 함수 선언 이후에 등록하기 위해 useEffect에서 처리
-  // 훅 규칙을 지키기 위해, 현재는 단축키 비활성화. 필요시 의존성 정리 후 활성화.
-  const shortcuts = createPaletteShortcuts({
-    generateNew: () => {},
-    save: () => {},
-    exportCSS: () => {},
-    exportJSON: () => {},
-    toggleHelp: () => {},
-  });
-  useKeyboardShortcuts(shortcuts, false);
 
   // 컴포넌트 마운트 시 저장된 팔레트 불러오기
   useEffect(() => {
@@ -113,12 +104,31 @@ export function PaletteGenerator() {
     });
   };
 
+  // 키보드 단축키 설정
+  const shortcuts = createPaletteShortcuts({
+    generateNew: generateNewPalette,
+    save: savePalette,
+    exportCSS: exportAsCSS,
+    exportJSON: exportAsJSON,
+    toggleHelp: () => setShowHelp(!showHelp),
+  });
+  
+  useKeyboardShortcuts(shortcuts);
+
   const modeLabels: Record<PaletteMode, string> = {
-    random: '랜덤',
-    monochromatic: '단색조',
-    analogous: '인접색',
-    complementary: '보색',
-    triadic: '삼색조',
+    random: '🎲 완전 랜덤',
+    monochromatic: '🌊 같은 색 톤',
+    analogous: '🌈 자연스러운 조화',
+    complementary: '⚡ 강렬한 대비',
+    triadic: '✨ 균형잡힌 조화',
+  };
+
+  const modeDescriptions: Record<PaletteMode, string> = {
+    random: '예측할 수 없는 놀라운 색상 조합',
+    monochromatic: '하나의 색상으로 만든 차분한 팔레트',
+    analogous: '자연에서 볼 수 있는 편안한 색상 조합',
+    complementary: '서로 돋보이게 하는 역동적인 조합',
+    triadic: '세련되고 안정감 있는 색상 조합',
   };
 
   return (
@@ -210,9 +220,26 @@ export function PaletteGenerator() {
             JSON 내보내기
           </Button>
 
-          {/* 도움말 버튼 비활성화 (모달 미사용) */}
+          <Button
+            variant="ghost"
+            onClick={() => setShowHelp(true)}
+            className="flex items-center gap-2"
+            title="도움말 및 단축키 (Shift + ?)"
+          >
+            <HelpCircle size={16} />
+            도움말
+          </Button>
 
-          {/* 접근성 체크 비활성화 (컴포넌트 미사용) */}
+          <Button
+            variant="outline"
+            onClick={() => setShowAccessibility(true)}
+            disabled={currentPalette.length < 2}
+            className="flex items-center gap-2"
+            title="접근성 분석"
+          >
+            <Shield size={16} />
+            접근성 체크
+          </Button>
         </div>
       </div>
 

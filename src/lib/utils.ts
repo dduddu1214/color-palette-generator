@@ -4,6 +4,9 @@ import { twMerge } from "tailwind-merge";
 import { Color, ColorFormat } from '@/types';
 import { getColorString } from './colorUtils';
 
+// Re-export getColorString for convenience
+export { getColorString };
+
 /**
  * 클래스명 조합 유틸리티 (Tailwind와 함께 사용)
  */
